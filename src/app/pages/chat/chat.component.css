@@ -1,0 +1,14 @@
+mensajes {
+    border: 1px solid #ccc;
+    padding: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+  }
+
+  .mensajes div {
+    margin-bottom: 5px;
+  }
+  .input-group {
+    margin-top: 10px;
+  }
