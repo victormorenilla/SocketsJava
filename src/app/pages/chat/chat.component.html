@@ -3,7 +3,7 @@
   <div class="input-group mb-3">
     <label for="nick" class="form-label me-2">Tu nick:</label>
     <input id="nick" class="form-control" [(ngModel)]="username" placeholder="Escribe tu nick aquí" />
-    <button [disabled]="username===''" class="btn btn-outline-primary" type="button" (click)="conectar()">
+    <button [disabled]="username===''||conectado" class="btn btn-outline-primary" type="button" (click)="conectar()">
       Conectar
     </button>
     <button *ngIf="conectado" class="btn btn-outline-danger" type="button" (click)="desconectar()">

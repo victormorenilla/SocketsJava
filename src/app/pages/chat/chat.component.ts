@@ -80,7 +80,6 @@ export class ChatComponent implements OnInit,OnDestroy{
         this.mensajes = mensajes; // Cargar los mensajes previos desde la base de datos
         console.log('Mensajes cargados desde la base de datos:',this.mensajes);
         this.conectado = true; // Cambiar el estado a conectado
-        this.username="";
       },
       (error) => {
         console.error('Error al cargar mensajes guardados:', error);
