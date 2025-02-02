@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 import { Client, IMessage } from '@stomp/stompjs';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import SockJS from 'sockjs-client';
+import { map } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 
 export class ChatServiceService {
@@ -13,6 +14,7 @@ export class ChatServiceService {
   private messageSubject = new Subject<any>();
   private isConnectedSubject = new BehaviorSubject<boolean>(false);
   private API_URL = 'http://localhost:8090/api/mensajes';
+  private IMAGE_UPLOAD_URL= 'http://localhost:8090/api/imagenes/subir';
   
   constructor(private http: HttpClient) {}
 
@@ -30,6 +32,7 @@ export class ChatServiceService {
 
     this.stompClient.onConnect = (frame) => {
       console.log('Conectado:', frame);
+      console.log('Frames de conexión:', frame.headers);
       this.isConnectedSubject.next(true);
 
       this.stompClient.subscribe('/chat/mensaje', (message: IMessage) => {
@@ -64,6 +67,15 @@ export class ChatServiceService {
     } else {
       console.error('No se puede enviar el mensaje. No estás conectado.');
     }
+  }
+
+  uploadImage(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    return this.http.post('http://localhost:8090/api/imagenes/subir', formData, {
+      responseType: 'text'  // Esto asegura que la respuesta sea interpretada como texto
+    });
   }
 
   getMessages(): Observable<any> {

@@ -1,38 +1,54 @@
 <div class="container mt-4">
-    <div class="input-group mb-3">
-      <label for="nick" class="form-label me-2">Tu nick:</label>
-      <input id="nick" class="form-control" [(ngModel)]="username"
-  placeholder="Escribe tu nick aquí" />
-      <button *ngIf="!conectado" class="btn btn-outline-primary"
-  type="button" (click)="conectar()">
-        Conectar
-      </button>
-      <button *ngIf="conectado" class="btn btn-outline-danger"
-  type="button" (click)="desconectar()">
-        Desconectar
-      </button>
-    </div>
-    <h2>Chat en tiempo real</h2>
-    <div class="mensajes border p-3 mb-3" style="max-height: 400px;
-  overflow-y: auto;">
-      <div *ngFor="let msg of mensajes" [style.color]="msg.color">
-        <strong>{{ msg.username }} ({{ msg.autor }}):</strong> {{
-  msg.contenido }}
-        <small class="text-muted ms-2">{{ msg.fechaEnvio | date: 'dd/MM/yy,HH:mm'
-  }}</small>
+  <!-- NICKNAME Y BOTONES DE CONEXIÓN -->
+  <div class="input-group mb-3">
+    <label for="nick" class="form-label me-2">Tu nick:</label>
+    <input id="nick" class="form-control" [(ngModel)]="username" placeholder="Escribe tu nick aquí" />
+    <button [disabled]="username===''" class="btn btn-outline-primary" type="button" (click)="conectar()">
+      Conectar
+    </button>
+    <button *ngIf="conectado" class="btn btn-outline-danger" type="button" (click)="desconectar()">
+      Desconectar
+    </button>
+  </div>
+
+  <h2>Chat en tiempo real</h2>
+
+  <!-- MENSAJES RECIBIDOS -->
+  <div class="mensajes border p-3 mb-3" style="max-height: 400px; overflow-y: auto;">
+    <div *ngFor="let msg of mensajes" [style.color]="msg.color">
+      <strong>{{ msg.username }} ({{ msg.autor }}):</strong>
+      <span *ngIf="msg.contenido">{{ msg.contenido }}</span>
+      
+      <!-- SI HAY IMAGEN, MOSTRARLA -->
+      <div *ngIf="msg.imageUrl">
+        <img [src]="msg.imageUrl" alt="Imagen enviada" class="img-thumbnail mt-2" style="max-width: 200px;">
       </div>
-    </div>
-   
-    <div class="input-group mt-3">
-      <input
-        class="form-control"
-        [(ngModel)]="mensaje"
-        placeholder="Escribe tu mensaje aquí"
-        [disabled]="!conectado"
-      />
-      <button class="btn btn-outline-success" (click)="enviarMensaje()"
-  [disabled]="!conectado || mensaje.trim() === ''">
-        Enviar
-      </button>
+
+      <small class="text-muted ms-2">{{ msg.fechaEnvio | date: 'dd/MM/yy, HH:mm' }}</small>
     </div>
   </div>
+
+  <!-- INPUT PARA MENSAJES Y ENVÍO -->
+  <div class="input-group mt-3">
+    <input
+      class="form-control"
+      [(ngModel)]="mensaje"
+      placeholder="Escribe tu mensaje aquí"
+      [disabled]="!conectado"
+    />
+    <button class="btn btn-outline-success" (click)="enviarMensaje()" [disabled]="!conectado || mensaje.trim() === ''">
+      Enviar
+    </button>
+  </div>
+
+  <!-- INPUT PARA SUBIR IMÁGENES -->
+  <div class="input-group mt-3">
+    <input type="file" (change)="onFileSelected($event)" class="form-control" accept="image/*" [disabled]="!conectado" />
+  </div>
+
+  <!-- PREVISUALIZACIÓN DE IMAGEN -->
+  <div class="mt-3">
+    <p>Previsualización de la imagen:</p>
+    <img [src]="imageUrl" class="img-thumbnail" style="max-width: 200px;">
+  </div>
+</div>
